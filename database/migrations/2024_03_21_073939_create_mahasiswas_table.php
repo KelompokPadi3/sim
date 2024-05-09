@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('tempat_lahir');
             $table->date('tanggal_lahir');
             $table->string('jenis_kelamin', 255);
+            $table->string('status_id', 255); // Tambahkan kolom status_id
             $table->timestamps();
         });
     }

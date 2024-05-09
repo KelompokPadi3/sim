@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mahasiswa;
+use App\Models\Status; 
 use Illuminate\Http\Request;
 
 class MahasiswaController extends Controller
@@ -15,29 +16,72 @@ class MahasiswaController extends Controller
     }
     public function create()
     {
-        return view('mahasiswa.create');
+        $status = Status::all();
+        return view('mahasiswa.create', compact('status'));
     }
+    // public function save(Request $request)
+    // {
+    //     $validation = $request->validate([
+    //         'nama_mahasiswa' => 'required',
+    //         'alamat_mahasiswa' => 'required',
+    //         'nomor_telepon' => 'required',
+    //         'email_mahasiswa' => 'required',
+    //         'tempat_lahir' => 'required',
+    //         'tanggal_lahir' => 'required',
+    //         'jenis_kelamin' => 'required',
+    //         'status_id' => 'required'
+    //     ]);
+    //     $data = Mahasiswa::create($validation);
+    //     echo $data;
+    //     if ($data) {
+    //         session()->flash('success', 'Data Mahasiswa Telah Ditambahkan');
+    //         return redirect(route('mahasiswa'));
+    //     } else {
+    //         session()->flash('error', 'Cek Kembali Data Anda');
+    //         return redirect(route('create'));
+    //     }
+    // }
     public function save(Request $request)
-    {
-        $validation = $request->validate([
-            'nama_mahasiswa' => 'required',
-            'alamat_mahasiswa' => 'required',
-            'nomor_telepon' => 'required',
-            'email_mahasiswa' => 'required',
-            'tempat_lahir' => 'required',
-            'tanggal_lahir' => 'required',
-            'jenis_kelamin' => 'required',
-        ]);
-        $data = Mahasiswa::create($validation);
-        echo $data;
-        if ($data) {
-            session()->flash('success', 'Data Mahasiswa Telah Ditambahkan');
-            return redirect(route('mahasiswa'));
-        } else {
-            session()->flash('error', 'Cek Kembali Data Anda');
-            return redirect(route('create'));
-        }
+{
+    $validation = $request->validate([
+        'nama_mahasiswa' => 'required',
+        'alamat_mahasiswa' => 'required',
+        'nomor_telepon' => 'required',
+        'email_mahasiswa' => 'required',
+        'tempat_lahir' => 'required',
+        'tanggal_lahir' => 'required',
+        'jenis_kelamin' => 'required',
+        'status_id' => 'required' // Ubah 'status_id' sesuai dengan nama input field untuk id status
+    ]);
+
+    // Ambil id status dari request
+    $statusId = $request->input('status_id');
+
+    // Cari data status berdasarkan id
+    $status = Status::find($statusId);
+
+    // Jika data status tidak ditemukan, kembalikan response error
+    if (!$status) {
+        session()->flash('error', 'Status tidak valid');
+        return redirect(route('create'));
     }
+
+    // Buat array data dengan nilai status yang sudah ditemukan
+    $data = $validation;
+    $data['status'] = $status->status;
+
+    // Simpan data mahasiswa ke dalam basis data
+    $newMahasiswa = Mahasiswa::create($data);
+
+    // Cek apakah data berhasil disimpan
+    if ($newMahasiswa) {
+        session()->flash('success', 'Data Mahasiswa Telah Ditambahkan');
+        return redirect(route('mahasiswa'));
+    } else {
+        session()->flash('error', 'Cek Kembali Data Anda');
+        return redirect(route('create'));
+    }
+}
     public function edit($id)
     {
         $mahasiswas = Mahasiswa::findOrFail($id);

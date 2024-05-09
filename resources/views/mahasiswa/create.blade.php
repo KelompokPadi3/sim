@@ -69,7 +69,13 @@
                         <span class="text-red-500">{{$message}}</span>
                         @enderror
                     </div>
-                  </div>            
+                  </div>      
+                  <select class="block w-full border px-2 py-2 text-md rounded-md my-2" name="status_id" id="status">
+                    <option disabled="disabled" selected>Status Mahasiswa</option> 
+                    @foreach($status as $value)
+                        <option value="{{ $value->id }}">{{ $value->status }}</option>
+                    @endforeach
+                </select>  
                 <div class="mb-8">
                     <label for="" class="text-md font-bold dark:text-white">Alamat Mahasiswa</label>
                     <input type="text" name="alamat_mahasiswa" class="block w-full border px-2 py-2 text-md rounded-md my-2" id="">

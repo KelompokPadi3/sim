@@ -51,6 +51,9 @@
                                         Jenis Kelamin
                                     </th>
                                     <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                        Status
+                                    </th>
+                                    <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
                                         Action
                                     </th>
                                 </tr>
@@ -80,6 +83,9 @@
                                         </td>
                                         <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                             {{$mahasiswa->jenis_kelamin}}
+                                        </td>
+                                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                            {{$mahasiswa->status->status}}
                                         </td>
                                         <td class="flex flex-row space-x-4 mt-2">
                                             <a href="{{ route('edit', ['id'=>$mahasiswa->id]) }}" class="flex items-center justify-center w-8 h-8 rounded-full" style="cursor: pointer; background-color: #1b1464; color: white">

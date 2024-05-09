@@ -17,5 +17,10 @@ class Mahasiswa extends Model
         'tempat_lahir',
         'tanggal_lahir',
         'jenis_kelamin',
+        'status_id'
     ];
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'status_id');
+    }
 }

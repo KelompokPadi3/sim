@@ -85,7 +85,8 @@ class MahasiswaController extends Controller
     public function edit($id)
     {
         $mahasiswas = Mahasiswa::findOrFail($id);
-        return view('mahasiswa.update', compact('mahasiswas'));
+        $statusList = Status::all();
+        return view('mahasiswa.update', compact('mahasiswas','statusList'));
     }
 
     public function delete($id)
@@ -102,6 +103,19 @@ class MahasiswaController extends Controller
     public function update(Request $request, $id)
     {
         $mahasiswas = Mahasiswa::findOrFail($id);
+
+        //Validasi request
+        $request->validate([
+            'nama_mahasiswa' => 'required|string|max:255',
+            'alamat_mahasiswa' => 'required|string|max:255',
+            'nomor_telepon' => 'required|string|max:15',
+            'email_mahasiswa' => 'required|email|max:255',
+            'tempat_lahir' => 'required|string|max:255',
+            'tanggal_lahir' => 'required|date',
+            'jenis_kelamin' => 'required|string|max:20',
+            'status_id' => 'required|exists:status,id',
+        ]);
+
         $nama_mahasiswa = $request->nama_mahasiswa;
         $alamat_mahasiswa = $request->alamat_mahasiswa;
         $nomor_telepon = $request->nomor_telepon;
@@ -109,6 +123,7 @@ class MahasiswaController extends Controller
         $tempat_lahir = $request->tempat_lahir;
         $tanggal_lahir = $request->tanggal_lahir;
         $jenis_kelamin = $request->jenis_kelamin;
+        $status_id = $request->status_id;
 
         $mahasiswas->nama_mahasiswa = $nama_mahasiswa;
         $mahasiswas->alamat_mahasiswa = $alamat_mahasiswa;
@@ -117,6 +132,7 @@ class MahasiswaController extends Controller
         $mahasiswas->tempat_lahir = $tempat_lahir;
         $mahasiswas->tanggal_lahir = $tanggal_lahir;
         $mahasiswas->jenis_kelamin = $jenis_kelamin;
+        $mahasiswas->status_id= $status_id;
         $data = $mahasiswas->save();
         if ($data) {
             session()->flash('success', 'Update Data Sukses');
